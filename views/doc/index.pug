@@ -1,0 +1,507 @@
+extends ../layout
+
+block content
+  h2 API Document
+  hr
+
+  ul
+    li(style="list-style-type: none;")
+      a(href="#book") Book REST API
+      ul
+        li(style="list-style-type: none;")
+          a(href="#get-book") Get all books with query
+        li(style="list-style-type: none;")
+          a(href="#post-book") Create new book
+        li(style="list-style-type: none;")
+          a(href="#get-book-id") Get book by id
+        li(style="list-style-type: none;")
+          a(href="#post-book-id") Modify book's properties
+        li(style="list-style-type: none;")
+          a(href="#get-book-code") Get book by bar code
+        li(style="list-style-type: none;")
+          a(href="#post-book-code") modify book's properties by bar code
+    li(style="list-style-type: none;")
+      a(href="#author") Author REST API
+      ul
+        li(style="list-style-type: none;")
+          a(href="#get-author") Get all authors with query
+        li(style="list-style-type: none;")
+          a(href="#post-author") Create new author
+        li(style="list-style-type: none;")
+          a(href="#get-author-id") Get author by id
+        li(style="list-style-type: none;")
+          a(href="#post-author-id") Modify author's properties
+
+  h6#book Book documents:
+  ul
+    li#get-book
+      .p-1
+        | Get all books with query (not required).
+      code
+        | GET /api/books?name={book_name}&authorId={author_id}&top={top}&skip={skip}
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning nextLink
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning totalCount
+            | :
+            span.text-danger(style="padding-left: 10px") number
+            | ,
+          li(style="list-style-type: none;") value: {
+            ul
+              li(style="list-style-type: none;")
+                span.label.label-warning id
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              each book in books
+                li(style="list-style-type: none;")
+                  span.label.label-warning=book.p
+                  | :
+                  span.text-danger(style="padding-left: 10px") #{book.t}
+                  | ,
+              li(style="list-style-type: none;") author: [{
+                ul
+                  li(style="list-style-type: none;")
+                    span.label.label-warning id
+                    | :
+                    span.text-danger(style="padding-left: 10px") string
+                    | ,
+                  li(style="list-style-type: none;")
+                    span.label.label-warning name
+                    | :
+                    span.text-danger(style="padding-left: 10px") string
+                    | ,
+              li(style="list-style-type: none;") }]
+              li(style="list-style-type: none;") size: {
+                ul
+                  each p in size
+                    li(style="list-style-type: none;")
+                      span.label.label-warning=p
+                      | :
+                      span.text-danger(style="padding-left: 10px") number
+                      | ,
+
+              li(style="list-style-type: none;") }
+          li(style="list-style-type: none;") }
+        |}
+    li#post-book
+      .p-1
+        | create new book record:
+      code
+        | POST /api/books
+      .p-1 body:
+        .bg-light(style="font-family: 'Fira Code', sans-serif;")
+          |{
+          ul
+            each book in books
+              li(style="list-style-type: none;")
+                span.label.label-warning=book.p
+                | :
+                span.text-danger(style="padding-left: 10px") #{book.t}
+                | ,
+            li(style="list-style-type: none;") 
+              | author:
+              span.label.label-warning name
+                | :
+              span.text-danger(style="padding-left: 10px") string
+                | ,
+            li(style="list-style-type: none;") }]
+            li(style="list-style-type: none;") size: {
+              ul
+                each p in size
+                  li(style="list-style-type: none;")
+                    span.label.label-warning=p
+                    | :
+                    span.text-danger(style="padding-left: 10px") number
+                    | ,
+
+            li(style="list-style-type: none;") }
+          |}
+      ul.p-1
+        li 'name' & 'barCode' is required. 
+        li If a book with barCode is existed, it just update old book, 'quantity' property = old quantity + new quantity
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          each book in books
+            li(style="list-style-type: none;")
+              span.label.label-warning=book.p
+              | :
+              span.text-danger(style="padding-left: 10px") #{book.t}
+              | ,
+          li(style="list-style-type: none;") 
+            | author:
+            span.label.label-warning name
+              | :
+            span.text-danger(style="padding-left: 10px") string
+              | ,
+          li(style="list-style-type: none;") }]
+          li(style="list-style-type: none;") size: {
+            ul
+              each p in size
+                li(style="list-style-type: none;")
+                  span.label.label-warning=p
+                  | :
+                  span.text-danger(style="padding-left: 10px") number
+                  | ,
+
+          li(style="list-style-type: none;") }
+        |}
+    li#get-book-id
+      .p-1 get book by id
+      code
+        | GET /api/books/id/{book_id}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          each book in books
+            li(style="list-style-type: none;")
+              span.label.label-warning=book.p
+              | :
+              span.text-danger(style="padding-left: 10px") #{book.t}
+              | ,
+          li(style="list-style-type: none;") author: [{
+            ul
+              li(style="list-style-type: none;")
+                span.label.label-warning id
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning name
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+          li(style="list-style-type: none;") }]
+          li(style="list-style-type: none;") size: {
+            ul
+              each p in size
+                li(style="list-style-type: none;")
+                  span.label.label-warning=p
+                  | :
+                  span.text-danger(style="padding-left: 10px") number
+                  | ,
+
+          li(style="list-style-type: none;") }
+        |}
+
+    li#post-book-id
+      .p-1 modify book's property by id
+      code
+        | POST /api/books/id/{book_id}
+      .p-1 body:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          each book in books
+            li(style="list-style-type: none;")
+              span.label.label-warning=book.p
+              | :
+              span.text-danger(style="padding-left: 10px") #{book.t}
+              | ,
+          li(style="list-style-type: none;") 
+            | author:
+            span.label.label-warning name
+              | :
+            span.text-danger(style="padding-left: 10px") string
+              | ,
+          li(style="list-style-type: none;") }]
+          li(style="list-style-type: none;") size: {
+            ul
+              each p in size
+                li(style="list-style-type: none;")
+                  span.label.label-warning=p
+                  | :
+                  span.text-danger(style="padding-left: 10px") number
+                  | ,
+
+          li(style="list-style-type: none;") }
+        |}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          each book in books
+            li(style="list-style-type: none;")
+              span.label.label-warning=book.p
+              | :
+              span.text-danger(style="padding-left: 10px") #{book.t}
+              | ,
+          li(style="list-style-type: none;") author: [{
+            ul
+              li(style="list-style-type: none;")
+                span.label.label-warning id
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning name
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+          li(style="list-style-type: none;") }]
+          li(style="list-style-type: none;") size: {
+            ul
+              each p in size
+                li(style="list-style-type: none;")
+                  span.label.label-warning=p
+                  | :
+                  span.text-danger(style="padding-left: 10px") number
+                  | ,
+
+          li(style="list-style-type: none;") }
+        |}
+    li#get-book-code
+      .p-1 modify book's property by bar code (the same get by id)
+      code
+        | GET /api/books/code/{book_code}
+    li#post-book-code
+      .p-1 modify book's property by bar code (the same modify by id)
+      code
+        | POST /api/books/code/{book_code}
+
+  h6#author authors:
+  ul
+    li#get-author 
+      .p-1 get all authors with query (not required):
+      code
+        | GET /api/authors?name={author_name}&top={top}&skip={skip}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning nextLink
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning totalCount
+            | :
+            span.text-danger(style="padding-left: 10px") number
+            | ,
+          li(style="list-style-type: none;") value: {
+            ul
+              li(style="list-style-type: none;")
+                span.label.label-warning id
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning name
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning fullName
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning birthday
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning description
+                | :
+                span.text-danger(style="padding-left: 10px") string
+                | ,
+              li(style="list-style-type: none;")
+                span.label.label-warning bookCount
+                | :
+                span.text-danger(style="padding-left: 10px") number
+                | ,
+          li(style="list-style-type: none;") }
+        |}
+
+    li#post-author
+      .p-1 create new author:
+      code
+        | POST /api/authors
+      .p-1 body:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning name
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning fullName
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning birthday
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning description
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+        |}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning name
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning fullName
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning birthday
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning description
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning bookCount
+            | :
+            span.text-danger(style="padding-left: 10px") number
+            | ,
+        |}
+    li#get-author-id
+      .p-1 get author by id
+      code
+        | GET /api/authors/id/{author_id}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning name
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning fullName
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning birthday
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning description
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning bookCount
+            | :
+            span.text-danger(style="padding-left: 10px") number
+            | ,
+        |}
+    li#post-author-id
+      .p-1 modify author's property
+      code
+        | POST /api/authors/id/{author_id}
+      .p-1 body:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning name
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning fullName
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning birthday
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning description
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+        |}
+      .p-1 response:
+      .bg-light(style="font-family: 'Fira Code', sans-serif;")
+        |{
+        ul
+          li(style="list-style-type: none;")
+            span.label.label-warning id
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning name
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning fullName
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning birthday
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning description
+            | :
+            span.text-danger(style="padding-left: 10px") string
+            | ,
+          li(style="list-style-type: none;")
+            span.label.label-warning bookCount
+            | :
+            span.text-danger(style="padding-left: 10px") number
+            | ,
+        |}
